@@ -1,0 +1,347 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+
+  <style>
+    table {
+      border: 2px solid black;
+      width: 80%;
+      margin: auto;
+      border-collapse: collapse;
+    }
+
+    td,
+    tr {
+      border: 2px solid black;
+      border-collapse: collapse;
+      padding: 5px;
+    }
+
+    #tablehead {
+      background-color: rgb(111, 167, 148);
+      border: 2px solid black;
+      margin: 5px;
+      padding: 10px;
+    }
+
+    #usertable {
+      border: 2px solid black;
+    }
+
+    .header {
+      margin-left: 4px;
+      font-size: 20px;
+    }
+
+    form {
+      margin-left: 10%;
+      font-size: large;
+      margin-top: 2%;
+    
+    }
+
+    #sub {
+      background-color: rgb(7, 101, 114);
+      font-size: large;
+      color: cornsilk;
+      border-radius: 5px;
+    }
+    #search{
+      width: 19%;
+      margin: auto;
+      margin-left: 10%;
+      font-size: large;
+    }
+    #fname,#sname,#dob{
+      font-size: large;
+    }
+  </style>
+</head>
+
+<body>
+  <form id="myform" name="form">
+    <label for="#">First name :</label>
+    <input type="text" name="fname" id="fname" maxlength="50" placeholder="Enter first name"><br><br>
+    <label for="#">Last name :</label>
+    <input type="text" name="sname" id="sname" maxlength="50" placeholder="Enter last name"><br><br>
+    <label for="#">DOB :</label>
+    <input type="date" name="dob" id="dob"><br><br>
+    <input type="Submit" id="sub" value="ADD IN TABLE" onclick="formValidation()"><br><br>
+  </form>
+  <br>
+  
+  <input type="text" name="Search" id="search" placeholder="Search for Names..." onkeyup="userSearch()"><br><br>
+</body><br>
+<script>
+
+  //validation
+  function formValidation() {
+    var firstName = document.forms["form"]["fname"].value;
+    var surName = document.forms["form"]["sname"].value;
+    var bday = document.forms["form"]["dob"].value;
+
+    if (firstName == "") {
+      alert("Please enter your first name");
+    }
+
+    else if (surName == "") {
+      alert("Please enter your last name");
+    }
+    else if (bday == "") {
+      alert("Please enter your dob");
+    }
+    else {
+      validateName();
+    }
+
+  }
+  function validateName() {
+    event.preventDefault();
+    var firstName = document.forms["form"]["fname"].value;
+    var surName = document.forms["form"]["sname"].value;
+    var b = true;
+
+
+    for (var i = 0; i < arr1.length; i++) {
+      if (firstName == arr1[i].fname) {
+        alert("First Name already exists");
+        b = false;
+      }
+    }
+
+
+    for (var i = 0; i < arr1.length; i++) {
+      if (surName == arr1[i].sname) {
+        alert("Last Name already exists");
+        b = false;
+      }
+    }
+
+    if (b) {
+      myFunction();
+    }
+
+  }
+  var arr1 = [
+    {
+      "fname": "Rajat",
+      "sname": "Singh",
+      "dob": "1997-6-5"
+    },
+    {
+      "fname": "Viv",
+      "sname": "Richard",
+      "dob": "1990-7-23"
+    },
+    {
+      "fname": "Peter",
+      "sname": "Saye",
+      "dob": "2002-6-9"
+    },
+    {
+      "fname": "Adem",
+      "sname": "Smith",
+      "dob": "2012-8-10"
+    }
+  ];
+
+  //sorted data for existing data
+
+  arr1.sort(function (a, b) {
+    var x = a.fname.toLowerCase();
+    var y = b.fname.toLowerCase();
+    if (x < y) {
+      return -1;
+    }
+    if (x > y) {
+      return 1;
+    }
+    return 0;
+  });
+
+
+
+  // Table for existing Json data which in a array! 
+
+  var body = document.getElementsByTagName("body")[0];
+  var table = document.createElement("table");
+  table.setAttribute("id", "usertable");
+
+  var row = table.insertRow();
+  row.setAttribute("id", "tablehead");
+
+  var cell = row.insertCell();
+  cell.innerHTML = "<b>First name</b>";
+
+  var cell = row.insertCell();
+  cell.innerHTML = "<b>Last name</b>";
+
+  var cell = row.insertCell();
+  cell.innerHTML = "<b>DOB</b>";
+
+  var cell = row.insertCell();
+  cell.innerHTML = "<b>Age</b>";
+
+  var cell = row.insertCell();
+  cell.innerHTML = "<b>ACTION</b>";
+
+  table.setAttribute("id", "usertable");
+  for (var i = 0; i < arr1.length; i++) {
+    var row = table.insertRow();
+    row.setAttribute("id", i);
+
+    var cell = row.insertCell();
+    cell.innerHTML = arr1[i].fname;
+
+    var cell = row.insertCell();
+    cell.innerHTML = arr1[i].sname;
+
+    var cell = row.insertCell();
+    cell.innerHTML = arr1[i].dob;
+
+    var cell = row.insertCell();
+    cell.innerHTML = getAge(arr1[i].dob);
+
+    var delbtn = row.insertCell();
+    delbtn.setAttribute("id", i);
+    delbtn.innerHTML = `<button onclick=deleteUser(${i})>DELETE</button>`;
+  }
+  body.appendChild(table);
+
+
+  //(Function) for data retrieve through form
+
+  function myFunction() {
+    event.preventDefault();
+    var user = {
+      "fname": document.getElementById("fname").value,
+      "sname": document.getElementById("sname").value,
+      "dob": document.getElementById("dob").value
+    }
+
+
+    // pushing data into table
+
+    arr1.push(user);
+    document.getElementById("myform").reset();
+    console.log(arr1);
+
+    // sorted data after retrieving from user
+
+    arr1.sort(function (a, b) {
+      var x = a.fname.toLowerCase();
+      var y = b.fname.toLowerCase();
+      if (x < y) {
+        return -1;
+      }
+      if (x > y) {
+        return 1;
+      }
+      return 0;
+    });
+
+    createTable();
+  }
+
+  // create table
+
+  function createTable() {
+    var body = document.getElementsByTagName("body")[0];
+    document.getElementById("usertable").remove();
+
+    var table = document.createElement("table");
+
+    var row = table.insertRow();
+    row.setAttribute("id", "tablehead");
+
+    var cell = row.insertCell();
+    cell.innerHTML = "<b>First Name</b>";
+
+    var cell = row.insertCell();
+    cell.innerHTML = "<b>Last Name</b>";
+
+    var cell = row.insertCell();
+    cell.innerHTML = "<b>DOB</b>";
+
+    var cell = row.insertCell();
+    cell.innerHTML = "<b>AGE</b>";
+
+    var cell = row.insertCell();
+    cell.innerHTML = "<b>ACTION</b>";
+
+    table.setAttribute("id", "usertable");
+
+    for (var i = 0; i < arr1.length; i++) {
+
+      var row = table.insertRow();
+      row.setAttribute("id", i);
+
+      var cell = row.insertCell();
+      cell.innerHTML = arr1[i].fname;
+
+      var cell = row.insertCell();
+      cell.innerHTML = arr1[i].sname;
+
+      var cell = row.insertCell();
+      cell.innerHTML = arr1[i].dob;
+
+      var cell = row.insertCell();
+      cell.innerHTML = getAge(arr1[i].dob);
+
+      var delbtn = row.insertCell();
+      delbtn.setAttribute("id", i);
+      delbtn.innerHTML = `<button onclick=deleteUser(${i})>DELETE</button>`;
+    }
+    body.appendChild(table);
+  }
+  // detele fuction for delete data 
+
+  function deleteUser(id) {
+    console.log(id);
+    arr1.splice(id, 1);
+    createTable();
+
+    console.log(arr1);
+
+  }
+
+  // search function 
+
+
+  function userSearch() {
+
+    var input = document.getElementById("search");
+    var value = input.value.toUpperCase();
+    var table = document.getElementById("usertable");
+    var tablerow = table.getElementsByTagName("tr");
+    for (var i = 1; i <= tablerow.length; i++) {
+      var tablecell = tablerow[i].getElementsByTagName("td")[0];
+      if (tablecell) {
+        var celldata = tablecell.textContent || tablecell.innerText;
+        if (celldata.toUpperCase().indexOf(value) > -1) {
+          tablerow[i].style.display = "";
+        }
+        else {
+          tablerow[i].style.display = "none";
+        }
+      }
+    }
+
+  }
+
+
+
+  // age calculator
+
+  function getAge(DOB) {
+    var today = new Date();
+    var birthDate = new Date(DOB);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    return age;
+  }
+
+</script>
+
+</html>
